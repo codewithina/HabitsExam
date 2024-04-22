@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+struct Habit {
+    var name: String
+}

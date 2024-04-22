@@ -8,14 +8,30 @@
 import SwiftUI
 
 struct ContentView: View {
+    let habits = [
+           Habit(name: "Borsta tänderna"),
+           Habit(name: "Dricka vatten"),
+           Habit(name: "Träna yoga")
+       ]
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            NavigationView {
+                List(habits, id: \.name) { habit in
+                    NavigationLink(destination: HabitDetailView(habit: habit)) {
+                        Text(habit.name)
+                    }
+                }
+                .navigationTitle("Mina Vanor")
+            }
         }
-        .padding()
+}
+
+struct HabitDetailView: View {
+    var habit: Habit
+
+    var body: some View {
+        Text(habit.name)
+            .navigationBarTitle(habit.name)
     }
 }
 
