@@ -51,6 +51,9 @@
 		A901981F2BD651F600D4437E /* HabitsExam */ = {
 			isa = PBXGroup;
 			children = (
+				A90198302BD661A800D4437E /* Models */,
+				A901982F2BD65DFD00D4437E /* ViewModels */,
+				A901982E2BD65DF600D4437E /* Views */,
 				A90198202BD651F600D4437E /* HabitsExamApp.swift */,
 				A90198222BD651F600D4437E /* ContentView.swift */,
 				A90198242BD651F800D4437E /* Assets.xcassets */,
@@ -65,6 +68,27 @@
 				A90198272BD651F800D4437E /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A901982E2BD65DF600D4437E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A901982F2BD65DFD00D4437E /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A90198302BD661A800D4437E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
