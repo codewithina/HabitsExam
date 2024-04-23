@@ -8,10 +8,12 @@
 import SwiftUI
 
 class HabitsViewModel {
-    func addHabit(){
-        
+    @Published var habits: [Habit] = []
+    
+    func addHabit(habit: Habit){
+        habits.append(habit)
     }
-    func removeHabit(){
-        
+    func removeHabit(at index: Int){
+        habits.remove(at: index)
     }
 }

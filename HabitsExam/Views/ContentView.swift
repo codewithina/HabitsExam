@@ -21,7 +21,7 @@ struct ContentView: View {
                         Text(habit.name)
                     }
                 }
-                .navigationTitle("Mina Vanor")
+                .navigationTitle("Mina vanor")
             }
         }
 }
