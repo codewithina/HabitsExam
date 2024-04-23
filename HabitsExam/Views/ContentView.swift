@@ -14,14 +14,18 @@ struct ContentView: View {
             NavigationView {
                 VStack {
                             HabitListView(viewModel: habitsViewModel)
-                            Button(action: {
-                                let newHabit = Habit(name: "Nytt vananamn", description: "Beskrivning av vanan")
-                                self.habitsViewModel.addHabit(habit: newHabit)
-                            }) {
-                                Text("Lägg till vana")
-                            }
                         }
                 .navigationTitle("Mina vanor")
+                .navigationBarItems(trailing:
+                                Button(action: {
+                                    let newHabit = Habit(name: "Nytt vananamn", description: "Beskrivning av vanan")
+                                    self.habitsViewModel.addHabit(habit: newHabit)
+                                }) {
+                                    Text("Lägg till vana")
+                                    Image(systemName: "plus")
+                                }
+                            )
+                
             }
         }
 }
@@ -48,7 +52,7 @@ struct HabitDetailView: View {
     var habit: Habit
 
     var body: some View {
-        Text(habit.name)
+        Text(habit.description)
             .navigationBarTitle(habit.name)
     }
 }
