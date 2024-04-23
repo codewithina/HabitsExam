@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class HabitsViewModel {
+class HabitsViewModel: ObservableObject {
     @Published var habits: [Habit] = []
     
     func addHabit(habit: Habit){

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    
     let habits = [
            Habit(name: "Borsta tänderna"),
            Habit(name: "Dricka vatten"),
