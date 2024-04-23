@@ -27,6 +27,21 @@ struct ContentView: View {
         }
 }
 
+struct HabitListView: View{
+    @ObservedObject var viewModel: HabitsViewModel
+    
+    var body: some View {
+        List {
+                    ForEach(viewModel.habits.indices, id: \.self) { index in
+                        Text(self.viewModel.habits[index].name)
+                    }
+                    .onDelete { indexSet in
+                        self.viewModel.removeHabit(at: indexSet.first!)
+                    }
+                }
+    }
+}
+
 struct HabitDetailView: View {
     var habit: Habit
 
