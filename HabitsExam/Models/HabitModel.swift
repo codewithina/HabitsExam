@@ -9,4 +9,5 @@ import Foundation
 
 struct Habit {
     var name: String
+    var description: String
 }
