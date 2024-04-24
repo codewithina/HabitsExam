@@ -6,9 +6,10 @@
 //
 
 /*
- TODO: Implementera funktionen för att hämta data från API.
- - En lista över alla vanor som användaren har lagt till.
- - Möjlighet att lägga till nya vanor genom att ange namnet på vanan.
+ TODO: För att uppnå VG
+ x En lista över alla vanor som användaren har lagt till.
+ - Spara vanor och annan info i appen.
+ x Möjlighet att lägga till nya vanor genom att ange namnet på vanan.
  - Möjlighet att markera om en vana har utförts varje dag genom att klicka på en knapp bredvid vanans namn.
  - Lagring av hur långt en "streak" är för varje vana, dvs. hur många dagar i rad vanan har utförts.
  - En sammanställning av användarens utförda vanor för varje dag, vecka och månad.
@@ -19,6 +20,9 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var habitsViewModel = HabitsViewModel()
+    @State private var showingAddHabitView = false
+    @State private var newHabitName = ""
+    @State private var newHabitDescription = ""
     
     var body: some View {
         NavigationView {
@@ -28,12 +32,14 @@ struct ContentView: View {
             .navigationTitle("Mina vanor")
             .navigationBarItems(trailing:
                                     Button(action: {
-                let newHabit = Habit(name: "Nytt vananamn", description: "Beskrivning av vanan")
-                self.habitsViewModel.addHabit(habit: newHabit)
+                showingAddHabitView = true
             }) {
-                Text("Lägg till vana")
+                Text("Ny vana")
                 Image(systemName: "plus")
             }
+                .sheet(isPresented: $showingAddHabitView, content: {
+                                AddHabitView(newHabitName: $newHabitName, newHabitDescription: $newHabitDescription, habitsViewModel: habitsViewModel, isPresented: $showingAddHabitView)
+                            })
             )
         }
     }
@@ -63,6 +69,39 @@ struct HabitDetailView: View {
     var body: some View {
         Text(habit.description)
             .navigationBarTitle(habit.name)
+    }
+}
+
+struct AddHabitView: View {
+    @Binding var newHabitName: String
+    @Binding var newHabitDescription: String
+    @ObservedObject var habitsViewModel: HabitsViewModel
+    @Binding var isPresented: Bool
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                TextField("Namn", text: $newHabitName)
+                    .padding()
+                TextField("Beskrivning", text: $newHabitDescription)
+                    .padding()
+                Spacer()
+                Button("Lägg till") {
+                    let newHabit = Habit(name: newHabitName, description: newHabitDescription)
+                    habitsViewModel.addHabit(habit: newHabit)
+                    newHabitName = ""
+                    newHabitDescription = ""
+                    isPresented = false
+                }
+                .padding()
+            }
+            .navigationTitle("Lägg till ny vana")
+            .navigationBarItems(trailing:
+                                    Button("Avbryt") {
+                                        isPresented = false
+                                    }
+            )
+        }
     }
 }
 
