@@ -60,7 +60,12 @@ struct HabitListView: View {
                         Image(systemName: viewModel.habits[index].isCompleted ? "checkmark.square.fill" : "square")
                     }
                     .buttonStyle(BorderlessButtonStyle())
-                    Text(viewModel.habits[index].name)
+        
+                                               Text(viewModel.habits[index].name)
+                                               Text("viewModel.habits[index].streak")
+                                                   .font(.caption)
+                                                   .foregroundColor(.gray)
+                                           
                 }
                 }
             }
@@ -96,7 +101,7 @@ struct AddHabitView: View {
                     .padding()
                 Spacer()
                 Button("Lägg till") {
-                    let newHabit = Habit(name: newHabitName, description: newHabitDescription, isCompleted: false)
+                    let newHabit = Habit(name: newHabitName, description: newHabitDescription, isCompleted: false, completedDates: [])
                     habitsViewModel.addHabit(habit: newHabit)
                     newHabitName = ""
                     newHabitDescription = ""
