@@ -11,4 +11,5 @@ struct Habit {
     var name: String
     var description: String
     var isCompleted: Bool
+    var completedDates: [Date]
 }
