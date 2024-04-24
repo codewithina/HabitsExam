@@ -52,7 +52,16 @@ struct HabitListView: View {
         List {
             ForEach(viewModel.habits.indices, id: \.self) { index in
                 NavigationLink(destination: HabitDetailView(habit: viewModel.habits[index])) {
+                    HStack {
+                    Button(action: {
+                        // Hantera när knappen trycks
+                        viewModel.toggleHabitCompletion(at: index)
+                    }) {
+                        Image(systemName: viewModel.habits[index].isCompleted ? "checkmark.square.fill" : "square")
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
                     Text(viewModel.habits[index].name)
+                }
                 }
             }
             .onDelete { indexSet in
@@ -87,7 +96,7 @@ struct AddHabitView: View {
                     .padding()
                 Spacer()
                 Button("Lägg till") {
-                    let newHabit = Habit(name: newHabitName, description: newHabitDescription)
+                    let newHabit = Habit(name: newHabitName, description: newHabitDescription, isCompleted: false)
                     habitsViewModel.addHabit(habit: newHabit)
                     newHabitName = ""
                     newHabitDescription = ""
