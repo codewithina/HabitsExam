@@ -6,9 +6,10 @@
 //
 
 /*
- TODO: Implementera funktionen för att hämta data från API.
- - En lista över alla vanor som användaren har lagt till.
- - Möjlighet att lägga till nya vanor genom att ange namnet på vanan.
+ TODO: För att uppnå VG
+ x En lista över alla vanor som användaren har lagt till.
+ - Spara vanor och annan info i appen.
+ x Möjlighet att lägga till nya vanor genom att ange namnet på vanan.
  - Möjlighet att markera om en vana har utförts varje dag genom att klicka på en knapp bredvid vanans namn.
  - Lagring av hur långt en "streak" är för varje vana, dvs. hur många dagar i rad vanan har utförts.
  - En sammanställning av användarens utförda vanor för varje dag, vecka och månad.
