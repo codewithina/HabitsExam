@@ -88,6 +88,8 @@ struct AddHabitView: View {
                 Button("Lägg till") {
                     let newHabit = Habit(name: newHabitName, description: newHabitDescription)
                     habitsViewModel.addHabit(habit: newHabit)
+                    newHabitName = ""
+                    newHabitDescription = ""
                     isPresented = false
                 }
                 .padding()
