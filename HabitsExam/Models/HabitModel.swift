@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-struct Habit: Identifiable {
+class Habit: Identifiable {
     var id: String
     var name: String
     var details: String

@@ -8,7 +8,7 @@
 /*
  TODO: För att uppnå VG
  x En lista över alla vanor som användaren har lagt till.
- - Spara vanor och annan info i appen.
+ x Spara vanor och annan info i appen.
  x Möjlighet att lägga till nya vanor genom att ange namnet på vanan.
  x Möjlighet att markera om en vana har utförts varje dag genom att klicka på en knapp bredvid vanans namn.
  x Lagring av hur långt en "streak" är för varje vana, dvs. hur många dagar i rad vanan har utförts.
@@ -21,9 +21,9 @@
  */
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
-    @StateObject var habitsViewModel = HabitsViewModel()
     @State private var showingAddHabitView = false
     @State private var newHabitName = ""
     @State private var newHabitDetails = ""
@@ -31,7 +31,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                HabitListView(viewModel: habitsViewModel)
+                HabitListView()
             }
             .navigationTitle("Mina vanor")
             .navigationBarItems(trailing:
@@ -42,7 +42,7 @@ struct ContentView: View {
                 Image(systemName: "plus")
             }
                 .sheet(isPresented: $showingAddHabitView, content: {
-                                AddHabitView(newHabitName: $newHabitName, newHabitDetails: $newHabitDetails, habitsViewModel: habitsViewModel, isPresented: $showingAddHabitView)
+                                AddHabitView(newHabitName: $newHabitName, newHabitDetails: $newHabitDetails, isPresented: $showingAddHabitView)
                             })
             )
         }
@@ -50,45 +50,105 @@ struct ContentView: View {
 }
 
 struct HabitListView: View {
-    @ObservedObject var viewModel: HabitsViewModel
+    @Environment(\.modelContext) private var context
+    @Query private var habits: [Habit]
+    
+    private let dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            formatter.timeZone = TimeZone(identifier: "Europe/Stockholm")
+            return formatter
+        }()
     
     var body: some View {
         List {
-            
-            ForEach(viewModel.habits.indices, id: \.self) { index in
-                NavigationLink(destination: HabitDetailView(habit: viewModel.habits[index])) {
+            ForEach(habits.indices, id: \.self) { index in
+                NavigationLink(destination: HabitDetailView(habit: habits[index])) {
                     HStack {
                         Button(action: {
-                            viewModel.toggleHabitCompletion(at: index)
-                            for habit in viewModel.habits {
-                                print("Habit: \(habit.name)")
-                                for completionDate in habit.completedDates {
-                                    print("Completion Date: \(completionDate)")
-                                }
-                            }
+                            toggleHabitCompletion(at: index)
                         }) {
-                            Image(systemName: viewModel.habits[index].isCompleted ? "checkmark.square.fill" : "square")
+                            Image(systemName: habits[index].isCompleted ? "checkmark.square.fill" : "square")
                         }
                         .buttonStyle(BorderlessButtonStyle())
                         
-                        Text(viewModel.habits[index].name)
+                        Text(habits[index].name)
                         Spacer()
-                        Text("\(viewModel.habits[index].streak) 🏆")
+                        Text("\(habits[index].streak) 🏆")
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
                 }
             }
             .onDelete { indexSet in
-                self.viewModel.removeHabit(at: indexSet.first!)
-            }
+                            indexSet.forEach { index in
+                                // Ta bort rätt habit med context.delete
+                                context.delete(habits[index])
+                            }
+                        }
         }
         .onAppear {
-                viewModel.calculateStreaks()
+            calculateStreaks()
         }
     }
-}
+    
+    func toggleHabitCompletion(at index: Int) {
+        let habit = habits[index]
+        
+        let todayDate = Date()
+        let todayDateString = dateFormatter.string(from: todayDate)
+        
+        if !habit.isCompleted {
+            if !habit.completedDates.contains(todayDateString) {
+                habits[index].completedDates.append(todayDateString)
+                habits[index].streak += 1
+                calculateStreaks()
+            }
+        } else {
+            if let indexToRemove = habits[index].completedDates.firstIndex(of: todayDateString) {
+                habits[index].completedDates.remove(at: indexToRemove)
+                habits[index].streak -= 1
+                calculateStreaks()
+            }
+        }
+        habits[index].isCompleted.toggle()
+    }
+    
+    func calculateStreaks() {
+        let todayDate = Date()
 
+        for index in habits.indices {
+            let completedDates = habits[index].completedDates.sorted().reversed()
+            var streakCount = 0
+            var currentDate = todayDate
+            var yesterday = Calendar.current.date(byAdding: .day, value: -1, to: todayDate) ?? Date()
+
+            for dateString in completedDates {
+                if dateFormatter.string(from: currentDate) == dateString {
+                    streakCount += 1
+                    if let newDate = Calendar.current.date(byAdding: .day, value: -1, to: currentDate) {
+                        currentDate = newDate
+                    } else {
+                        break
+                    }
+                }
+                else if dateFormatter.string(from: yesterday) == dateString {
+                    streakCount += 1
+                    if let dayBefore = Calendar.current.date(byAdding: .day, value: -1, to: yesterday) {
+                        yesterday = dayBefore
+                    } else {
+                        break
+                    }
+                }else {
+                    break
+                }
+            }
+
+            habits[index].streak = streakCount
+        }
+    }
+    
+}
 
 struct HabitDetailView: View {
     var habit: Habit
@@ -100,9 +160,10 @@ struct HabitDetailView: View {
 }
 
 struct AddHabitView: View {
+    @Environment(\.modelContext) private var context
+    
     @Binding var newHabitName: String
     @Binding var newHabitDetails: String
-    @ObservedObject var habitsViewModel: HabitsViewModel
     @Binding var isPresented: Bool
     
     var body: some View {
@@ -114,8 +175,7 @@ struct AddHabitView: View {
                     .padding()
                 Spacer()
                 Button("Lägg till") {
-                    let newHabit = Habit(name: newHabitName, details: newHabitDetails, completedDates: [])
-                    habitsViewModel.addHabit(habit: newHabit)
+                    addHabit()
                     newHabitName = ""
                     newHabitDetails = ""
                     isPresented = false
@@ -129,6 +189,11 @@ struct AddHabitView: View {
                                     }
             )
         }
+    }
+    
+    func addHabit() {
+        let newHabit = Habit(name: newHabitName, details: newHabitDetails, completedDates: [])
+        context.insert(newHabit)
     }
 }
 
