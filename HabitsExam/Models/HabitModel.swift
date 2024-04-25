@@ -11,6 +11,6 @@ struct Habit {
     var name: String
     var description: String
     var isCompleted: Bool = false
-    var completedDates: [Date]
+    var completedDates: [String]
     var streak: Int = 0
 }
