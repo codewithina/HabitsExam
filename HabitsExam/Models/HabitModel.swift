@@ -6,8 +6,23 @@
 //
 
 import Foundation
+import SwiftData
 
-struct Habit {
+@Model
+struct Habit: Identifiable {
+    var id: String
     var name: String
-    var description: String
+    var details: String
+    var isCompleted: Bool
+    var completedDates: [String]
+    var streak: Int
+    
+    init(name: String, details: String, completedDates: [String]) {
+        self.id = UUID().uuidString
+        self.name = name
+        self.details = details
+        self.isCompleted = false
+        self.completedDates = completedDates
+        self.streak = 0
+    }
 }
