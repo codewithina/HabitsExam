@@ -10,5 +10,7 @@ import Foundation
 struct Habit {
     var name: String
     var description: String
-    var isCompleted: Bool
+    var isCompleted: Bool = false
+    var completedDates: [String]
+    var streak: Int = 0
 }

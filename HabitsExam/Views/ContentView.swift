@@ -14,6 +14,10 @@
  - Lagring av hur långt en "streak" är för varje vana, dvs. hur många dagar i rad vanan har utförts.
  - En sammanställning av användarens utförda vanor för varje dag, vecka och månad.
  - Möjlighet att ställa in påminnelser för varje vana, så att användaren får en påminnelse att utföra vanan vid en specifik tidpunkt varje dag.
+
+ TODO: Extras
+ - Lägg till sortering avklarade/återstående för dagen.
+ - När det är ny dag, återställs markeringar och alal habits läggs i återstående.
  */
 
 import SwiftUI
@@ -50,23 +54,37 @@ struct HabitListView: View {
     
     var body: some View {
         List {
+            
             ForEach(viewModel.habits.indices, id: \.self) { index in
                 NavigationLink(destination: HabitDetailView(habit: viewModel.habits[index])) {
                     HStack {
-                    Button(action: {
-                        // Hantera när knappen trycks
-                        viewModel.toggleHabitCompletion(at: index)
-                    }) {
-                        Image(systemName: viewModel.habits[index].isCompleted ? "checkmark.square.fill" : "square")
+                        Button(action: {
+                            viewModel.toggleHabitCompletion(at: index)
+                            for habit in viewModel.habits {
+                                print("Habit: \(habit.name)")
+                                for completionDate in habit.completedDates {
+                                    print("Completion Date: \(completionDate)")
+                                }
+                            }
+                        }) {
+                            Image(systemName: viewModel.habits[index].isCompleted ? "checkmark.square.fill" : "square")
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
+                        
+                        Text(viewModel.habits[index].name)
+                        Spacer()
+                        Text("\(viewModel.habits[index].streak) 🏆")
+                            .font(.caption)
+                            .foregroundColor(.gray)
                     }
-                    .buttonStyle(BorderlessButtonStyle())
-                    Text(viewModel.habits[index].name)
-                }
                 }
             }
             .onDelete { indexSet in
                 self.viewModel.removeHabit(at: indexSet.first!)
             }
+        }
+        .onAppear {
+                viewModel.calculateStreaks()
         }
     }
 }
@@ -96,7 +114,7 @@ struct AddHabitView: View {
                     .padding()
                 Spacer()
                 Button("Lägg till") {
-                    let newHabit = Habit(name: newHabitName, description: newHabitDescription, isCompleted: false)
+                    let newHabit = Habit(name: newHabitName, description: newHabitDescription, isCompleted: false, completedDates: [])
                     habitsViewModel.addHabit(habit: newHabit)
                     newHabitName = ""
                     newHabitDescription = ""
