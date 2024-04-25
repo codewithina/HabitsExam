@@ -10,8 +10,8 @@
  x En lista över alla vanor som användaren har lagt till.
  - Spara vanor och annan info i appen.
  x Möjlighet att lägga till nya vanor genom att ange namnet på vanan.
- - Möjlighet att markera om en vana har utförts varje dag genom att klicka på en knapp bredvid vanans namn.
- - Lagring av hur långt en "streak" är för varje vana, dvs. hur många dagar i rad vanan har utförts.
+ x Möjlighet att markera om en vana har utförts varje dag genom att klicka på en knapp bredvid vanans namn.
+ x Lagring av hur långt en "streak" är för varje vana, dvs. hur många dagar i rad vanan har utförts.
  - En sammanställning av användarens utförda vanor för varje dag, vecka och månad.
  - Möjlighet att ställa in påminnelser för varje vana, så att användaren får en påminnelse att utföra vanan vid en specifik tidpunkt varje dag.
 
@@ -26,7 +26,7 @@ struct ContentView: View {
     @StateObject var habitsViewModel = HabitsViewModel()
     @State private var showingAddHabitView = false
     @State private var newHabitName = ""
-    @State private var newHabitDescription = ""
+    @State private var newHabitDetails = ""
     
     var body: some View {
         NavigationView {
@@ -42,7 +42,7 @@ struct ContentView: View {
                 Image(systemName: "plus")
             }
                 .sheet(isPresented: $showingAddHabitView, content: {
-                                AddHabitView(newHabitName: $newHabitName, newHabitDescription: $newHabitDescription, habitsViewModel: habitsViewModel, isPresented: $showingAddHabitView)
+                                AddHabitView(newHabitName: $newHabitName, newHabitDetails: $newHabitDetails, habitsViewModel: habitsViewModel, isPresented: $showingAddHabitView)
                             })
             )
         }
@@ -94,14 +94,14 @@ struct HabitDetailView: View {
     var habit: Habit
     
     var body: some View {
-        Text(habit.description)
+        Text(habit.details)
             .navigationBarTitle(habit.name)
     }
 }
 
 struct AddHabitView: View {
     @Binding var newHabitName: String
-    @Binding var newHabitDescription: String
+    @Binding var newHabitDetails: String
     @ObservedObject var habitsViewModel: HabitsViewModel
     @Binding var isPresented: Bool
     
@@ -110,14 +110,14 @@ struct AddHabitView: View {
             VStack {
                 TextField("Namn", text: $newHabitName)
                     .padding()
-                TextField("Beskrivning", text: $newHabitDescription)
+                TextField("Beskrivning", text: $newHabitDetails)
                     .padding()
                 Spacer()
                 Button("Lägg till") {
-                    let newHabit = Habit(name: newHabitName, description: newHabitDescription, isCompleted: false, completedDates: [])
+                    let newHabit = Habit(name: newHabitName, details: newHabitDetails, completedDates: [])
                     habitsViewModel.addHabit(habit: newHabit)
                     newHabitName = ""
-                    newHabitDescription = ""
+                    newHabitDetails = ""
                     isPresented = false
                 }
                 .padding()
