@@ -47,15 +47,51 @@ struct HabitListView: View {
                         }
         }
         .onAppear {
+            // Add fictive completion dates
+            // habits[2].completedDates.append("2024-04-21")
+            checkTodaysToggleCompletion()
             calculateStreaks()
+            
+            //Controlling dates
+            printSavedDates()
+        }
+    }
+    
+    // Just a control function
+    func printSavedDates(){
+        for habit in habits {
+            print("Habit: \(habit.name)")
+            print("Completed Dates:")
+            for date in habit.completedDates {
+                print(date)
+            }
+            print("---")
+        }
+    }
+    
+    func todaysDate() -> String {
+        let todayDate = Date()
+        let todayDateString = dateFormatter.string(from: todayDate)
+        return todayDateString
+    }
+    
+    func checkTodaysToggleCompletion() {
+        let todayDateString = todaysDate()
+        
+        for index in habits.indices {
+            let habit = habits[index]
+            if habit.completedDates.contains(todayDateString) {
+                habits[index].isCompleted = true
+            } else {
+                habits[index].isCompleted = false
+            }
         }
     }
     
     func toggleHabitCompletion(at index: Int) {
         let habit = habits[index]
         
-        let todayDate = Date()
-        let todayDateString = dateFormatter.string(from: todayDate)
+        let todayDateString = todaysDate()
         
         if !habit.isCompleted {
             if !habit.completedDates.contains(todayDateString) {
