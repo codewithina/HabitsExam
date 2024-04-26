@@ -12,7 +12,7 @@
 		A90198252BD651F800D4437E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A90198242BD651F800D4437E /* Assets.xcassets */; };
 		A90198282BD651F800D4437E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A90198272BD651F800D4437E /* Preview Assets.xcassets */; };
 		A90198322BD67C1F00D4437E /* HabitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90198312BD67C1F00D4437E /* HabitModel.swift */; };
-		A90198342BD67D1400D4437E /* HabitsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90198332BD67D1400D4437E /* HabitsViewModel.swift */; };
+		A90198382BDB783E00D4437E /* HabitsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90198372BDB783E00D4437E /* HabitsListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,7 +22,7 @@
 		A90198242BD651F800D4437E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A90198272BD651F800D4437E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A90198312BD67C1F00D4437E /* HabitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitModel.swift; sourceTree = "<group>"; };
-		A90198332BD67D1400D4437E /* HabitsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsViewModel.swift; sourceTree = "<group>"; };
+		A90198372BDB783E00D4437E /* HabitsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +56,6 @@
 			isa = PBXGroup;
 			children = (
 				A90198302BD661A800D4437E /* Models */,
-				A901982F2BD65DFD00D4437E /* ViewModels */,
 				A901982E2BD65DF600D4437E /* Views */,
 				A90198202BD651F600D4437E /* HabitsExamApp.swift */,
 				A90198242BD651F800D4437E /* Assets.xcassets */,
@@ -77,16 +76,9 @@
 			isa = PBXGroup;
 			children = (
 				A90198222BD651F600D4437E /* ContentView.swift */,
+				A90198372BDB783E00D4437E /* HabitsListView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		A901982F2BD65DFD00D4437E /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				A90198332BD67D1400D4437E /* HabitsViewModel.swift */,
-			);
-			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		A90198302BD661A800D4437E /* Models */ = {
@@ -168,9 +160,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A90198322BD67C1F00D4437E /* HabitModel.swift in Sources */,
+				A90198382BDB783E00D4437E /* HabitsListView.swift in Sources */,
 				A90198232BD651F600D4437E /* ContentView.swift in Sources */,
 				A90198212BD651F600D4437E /* HabitsExamApp.swift in Sources */,
-				A90198342BD67D1400D4437E /* HabitsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
